@@ -38,15 +38,15 @@ export const useNotesStore = defineStore('notes', () => {
 
   /* Actions/Mutations */
 
-  deleteNote: (state) => (noteToDelete) => {
+  const deleteNote = (state) => (noteToDelete) => {
     state.notes.splice(state.notes.findIndex((note) => note.id == noteToDelete.id), 1)
   }
 
-  createNote: (state) => (note) => {
+  const createNote = (state) => (note) => {
     state.notes.push(note)
   }
 
-  editNote: (state) => (newNote) => {
+  const editNote = (state) => (newNote) => {
     let index = state.notes.findIndex(note => note.id == newNote.id)
     state.notes[index] = newNote
 

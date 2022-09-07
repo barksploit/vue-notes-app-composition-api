@@ -14,12 +14,11 @@
 
 <script setup>
 import Footer from "@/components/Footer.vue";
-import { ref, beforeCreate, watch } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useNotesStore } from '@/stores/notes'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const store = useNotesStore()
-const route = useRouter()
 
   const data = ref({
       prevPath: "",
@@ -27,28 +26,25 @@ const route = useRouter()
       transitionName: null,
   })
 
-  beforeCreate(() => {
-    useNotesStore.initialiseStore()
+  onBeforeMount(() => {
+    store.initialiseStore()
   })
 
-  watch(()
-    $route(to, from) {
-      if (!this.prevPath) {
-        this.transitionName = "";
+  onBeforeRouteLeave((to, from) => {
+      if (!data.value.prevPath) {
+        data.value.transitionName = "";
       } else {
         if (
-          this.paths.findIndex((path) => path == from.path) <
-          this.paths.findIndex((path) => path == to.path)
+          data.value.paths.findIndex((path) => path == from.path) <
+          data.value.paths.findIndex((path) => path == to.path)
         ) {
-          this.transitionName = "left";
+          data.value.transitionName = "left";
         } else {
-          this.transitionName = "right";
+          data.value.transitionName = "right";
         }
       }
-      this.prevPath = to.path;
-    },
-  },
-};
+      data.value.prevPath = route.to.path;
+    })
 </script>
 
 
