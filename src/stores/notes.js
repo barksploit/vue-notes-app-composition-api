@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { watch } from 'vue'
 
 export const useNotesStore = defineStore('notes', () => {
 
@@ -25,6 +26,15 @@ export const useNotesStore = defineStore('notes', () => {
       content: 'Remember to take the dogs out for a walk'
     }
   ])
+
+  watch(
+    notes,
+    (state) => {
+      // persist the whole state to the local storage whenever it changes
+      localStorage.setItem('store', JSON.stringify(state))
+    },
+    { deep: true }
+  )
 
   /* Getters */
 
