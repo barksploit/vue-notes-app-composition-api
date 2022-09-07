@@ -14,7 +14,7 @@
 
 <script setup>
 import Footer from "@/components/Footer.vue";
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import { useNotesStore } from '@/stores/notes'
 import { onBeforeRouteLeave } from 'vue-router'
 
@@ -29,6 +29,15 @@ const data = ref({
 onBeforeMount(() => {
   store.initialiseStore()
 })
+
+watch(
+  store,
+  (state) => {
+    // persist the whole state to the local storage whenever it changes
+    localStorage.setItem('store', JSON.stringify(state))
+  },
+  { deep: true }
+)
 
 onBeforeRouteLeave((to, from) => {
     if (!data.value.prevPath) {
