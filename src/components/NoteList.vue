@@ -45,43 +45,44 @@ import { useNotesStore } from '@/stores/notes'
     this.notes = this.getNotes
   })
 
-  computed: {
-    ...mapGetters(["getNotes"]),
-    sortedNotes: function () {
-      if (this.sortOrder === "nto")
-        return this.notes
+  const store = useNotesStore()
+
+  const sortedNotes = computed(() => {
+      if (data.sortOrder === "nto") {
+        return notes
           .slice()
           .sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated))
           .filter(
             (note) =>
-              note.content.toLowerCase().includes(this.debouncedInput) ||
-              note.title.toLowerCase().includes(this.debouncedInput)
-          );
+              note.content.toLowerCase().includes(debouncedInput) ||
+              note.title.toLowerCase().includes(debouncedInput)
+          )
+      }
       else {
-        return this.notes
+        return notes
           .slice()
           .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
           .filter(
             (note) =>
-              note.content.toLowerCase().includes(this.debouncedInput) ||
-              note.title.toLowerCase().includes(this.debouncedInput)
+              note.content.toLowerCase().includes(debouncedInput) ||
+              note.title.toLowerCase().includes(debouncedInput)
           );
       }
-    },
-    searchInput: {
+    })
+
+    const searchInput = computed({
       get() {
-        return this.debouncedInput;
+        return debouncedInput;
       },
+
       set(val) {
-        if (this.timeout) clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-          this.debouncedInput = val.toLowerCase();
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          debouncedInput = val.toLowerCase();
         }, 300);
-      },
-    },
-  },
-  components: { Note },
-};
+      }
+    })
+
 </script>
 
 <style scoped>
