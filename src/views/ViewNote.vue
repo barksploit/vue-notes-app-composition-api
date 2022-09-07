@@ -16,7 +16,6 @@
 
 <script>
 import router from "../router";
-import { mapGetters } from "vuex";
 
 export default {
   props: {
