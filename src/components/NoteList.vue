@@ -3,7 +3,7 @@
     <div class="search-controls">
       <div class="search-bar-container">
         <input
-          v-if="notes.length > 0"
+          v-if="store.notes.length > 0"
           type="search"
           id="search-bar"
           placeholder="Search.."
@@ -12,8 +12,8 @@
       </div>
       <div class="sort-type-dropdown-container">
         <select
-          v-if="notes.length > 1"
-          v-model="sortOrder"
+          v-if="store.notes.length > 1"
+          v-model="data.sortOrder"
           class="sort-type-dropdown"
         >
           <option value="nto">Newest to Oldest</option>
@@ -24,32 +24,27 @@
     <div class="notes" v-if="sortedNotes.length > 0">
       <Note v-for="note in sortedNotes" :key="note.id" :note="note" />
     </div>
-    <h2 class="not-found" v-else-if="notes.length > 0">No Notes Found</h2>
+    <h2 class="not-found" v-else-if="store.notes.length > 0">No Notes Found</h2>
     <h2 class="not-found" v-else>You've made no notes yet</h2>
   </section>
 </template>
 
 <script setup>
 import Note from "@/components/Note.vue";
-import { ref, onMounted, computed } from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
 import { useNotesStore } from '@/stores/notes'
 
   const store = useNotesStore() 
 
   const data = ref({
-      notes: [],
       sortOrder: "nto",
       timeout: null,
       debouncedInput: "",
   })
 
-  onMounted(() => {
-    data.value.notes = store.getNotes
-  })
-
   const sortedNotes = computed(() => {
       if (data.value.sortOrder === "nto") {
-        return data.value.notes
+        return store.notes
           .slice()
           .sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated))
           .filter(
@@ -59,7 +54,7 @@ import { useNotesStore } from '@/stores/notes'
           )
       }
       else {
-        return data.value.notes
+        return store.notes
           .slice()
           .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
           .filter(

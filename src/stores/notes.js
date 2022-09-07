@@ -29,11 +29,7 @@ export const useNotesStore = defineStore('notes', () => {
   /* Getters */
 
   const getNote = computed((state) => (id) => {
-    return notes.find(note => note.id == id)
-  })
-
-  const getNotes = computed(() => {
-    return notes
+    return notes.value.find(note => note.id == id)
   })
 
   /* Actions/Mutations */
@@ -58,5 +54,5 @@ export const useNotesStore = defineStore('notes', () => {
     }
   }
 
-  return { notes, deleteNote, createNote, editNote, initialiseStore, getNotes, getNote }
+  return { notes, deleteNote, createNote, editNote, initialiseStore, getNote }
 })

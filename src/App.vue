@@ -5,7 +5,7 @@
     <router-link :to="{ name: 'create' }">Create Note</router-link>
   </div>
   <router-view v-slot="{ Component, route }">
-    <Transition :name="transitionName" mode="out-in">
+    <Transition :name="data.transitionName" mode="out-in">
       <component :is="Component" :key="route.path" />
     </Transition>
   </router-view>
@@ -20,31 +20,31 @@ import { onBeforeRouteLeave } from 'vue-router'
 
 const store = useNotesStore()
 
-  const data = ref({
-      prevPath: "",
-      paths: ["/", "/about", "/create"],
-      transitionName: null,
-  })
+const data = ref({
+    prevPath: "",
+    paths: ["/", "/about", "/create"],
+    transitionName: null,
+})
 
-  onBeforeMount(() => {
-    store.initialiseStore()
-  })
+onBeforeMount(() => {
+  store.initialiseStore()
+})
 
-  onBeforeRouteLeave((to, from) => {
-      if (!data.value.prevPath) {
-        data.value.transitionName = "";
+onBeforeRouteLeave((to, from) => {
+    if (!data.value.prevPath) {
+      data.value.transitionName = "";
+    } else {
+      if (
+        data.value.paths.findIndex((path) => path == from.path) <
+        data.value.paths.findIndex((path) => path == to.path)
+      ) {
+        data.value.transitionName = "left";
       } else {
-        if (
-          data.value.paths.findIndex((path) => path == from.path) <
-          data.value.paths.findIndex((path) => path == to.path)
-        ) {
-          data.value.transitionName = "left";
-        } else {
-          data.value.transitionName = "right";
-        }
+        data.value.transitionName = "right";
       }
-      data.value.prevPath = route.to.path;
-    })
+    }
+    data.value.prevPath = route.to.path;
+  })
 </script>
 
 
