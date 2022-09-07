@@ -2,9 +2,7 @@
   <div class="about">
     <h1 class="main-title">About</h1>
       <p class="content">
-        This is just a small note-taking Vue.js app that I created to test my
-        knowledge using Vue Router, Vuex State Management Library and the Web
-        Storage API.
+        Previous vue-notes-app rebuilt using the Vue Composition API instead of the older Options API, and also using the latest and greatest Pinia Store Library instead of Vuex.
       </p>
   </div>
 </template>
