@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, PiniaVuePlugin } from 'pinia'
 import { watch } from 'vue'
 
 export const useNotesStore = defineStore('notes', () => {
@@ -44,23 +44,23 @@ export const useNotesStore = defineStore('notes', () => {
 
   /* Actions/Mutations */
 
-  const deleteNote = (state) => (noteToDelete) => {
-    state.notes.splice(state.notes.findIndex((note) => note.id == noteToDelete.id), 1)
+  const deleteNote = (noteToDelete) => {
+    notes.value.splice(state.notes.findIndex((note) => note.id == noteToDelete.id), 1)
   }
 
-  const createNote = (state) => (note) => {
-    state.notes.push(note)
+  const createNote = (note) => {
+    notes.value.push(note)
   }
 
-  const editNote = (state) => (newNote) => {
-    let index = state.notes.findIndex(note => note.id == newNote.id)
-    state.notes[index] = newNote
+  const editNote = (newNote) => {
+    let index = notes.value.findIndex(note => note.id == newNote.id)
+    notes.value[index] = newNote
 
   }
 
   function initialiseStore() {
     if (localStorage.getItem('store')) {
-      this.replaceState(JSON.parse(localStorage.getItem('store')))
+      this.$patch(JSON.parse(localStorage.getItem('store')))
     }
   }
 

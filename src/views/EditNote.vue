@@ -9,7 +9,7 @@
         <div class="input-group">
           <label for="title">Note Title</label>
           <input
-            v-model="titleInput"
+            v-model="state.titleInputValue"
             type="text"
             placeholder="Shopping List"
             required
@@ -19,7 +19,7 @@
         <div class="input-group">
           <label for="content">Note Content</label>
           <textarea
-            v-model="contentInput"
+            v-model="state.contentInputValue"
             placeholder="Eggs, Chicken, Bacon"
             required
           ></textarea>
@@ -32,50 +32,53 @@
     </div>
   </template>
   
-  <script>
-  import router from "../router";
+  <script setup>
+  import { useRouter } from 'vue-router'
+  import { onMounted, ref, computed, defineProps, onBeforeMount } from 'vue'
+  import { useNotesStore } from '@/stores/notes'
 
-  export default {
-    name: "EditNote",
-    data() {
-        return {
-            titleInput: "",
-            contentInput: "",
-        }
-    },
-    props: {
-        id: String
-    },
-    methods: {
-        goBack() {
-        router.go(-1);
-        },
-        submitForm: function () {
-            const note = {
-            id: this.id,
-            title: this.titleInput,
-            dateCreated: Date.now(),
-            content: this.contentInput,
-            };
-    
-            this.$store.commit("editNote", note);
-            router.push({ name: "Home" });
-        },
-    },
-    mounted() {
-        this.titleInput = this.fetchNoteTitle
-        this.contentInput = this.fetchNoteContent
-    },
-    computed: {
-        ...mapGetters(["getNote"]),
-        fetchNoteTitle() {
-            return this.getNote(this.id).title
-        },
-        fetchNoteContent() {
-            return this.getNote(this.id).content
-        }
-    }
+  const store = useNotesStore()
+
+  const router = useRouter()
+
+  const state = ref({
+            titleInputValue: "",
+            contentInputValue: "",
+  })
+
+  const props = defineProps({
+    id: String
+  })
+
+  function goBack() {
+    router.go(-1);
   }
+
+  function submitForm() {
+      const note = {
+        id: props.id,
+        title: state.value.titleInputValue,
+        dateCreated: Date.now(),
+        content: state.value.contentInputValue,
+      };
+
+      console.log(note)
+
+      store.editNote(note);
+      router.push({ name: "Home" });
+  }
+
+onBeforeMount(() => {
+      state.value.titleInputValue = fetchNoteTitle.value
+      state.value.contentInputValue = fetchNoteContent.value
+  })
+
+  const fetchNoteTitle = computed(() => {
+          return store.getNote(props.id).title
+  })
+  const fetchNoteContent = computed(() => {
+      return store.getNote(props.id).content
+  })
   </script>
   
   <style lang="scss" scoped>
