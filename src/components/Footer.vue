@@ -1,6 +1,6 @@
 <template>
     <footer>
-        Made by Thomas Griffin @ <a target="_blank" rel="noopener noreferrer" href="https://grfn.sh">grfn.sh</a> | <a href="https://github.com/barksploit/vue-notes-app" target="_blank" rel="noopener noreferrer">See on GitHub</a><img class="github-logo" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
+        Made by Thomas Griffin @ <a target="_blank" rel="noopener noreferrer" href="https://grfn.sh">grfn.sh</a> | <a href="https://github.com/barksploit/vue3-notes-app" target="_blank" rel="noopener noreferrer">See on GitHub</a><img class="github-logo" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
     </footer>
 </template>
 
