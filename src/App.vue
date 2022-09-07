@@ -30,14 +30,9 @@ onBeforeMount(() => {
   store.initialiseStore()
 })
 
-watch(
-  store,
-  (state) => {
-    // persist the whole state to the local storage whenever it changes
-    localStorage.setItem('store', JSON.stringify(state))
-  },
-  { deep: true }
-)
+store.$subscribe((mutation, state) => {
+  localStorage.setItem('store', JSON.stringify(state))
+})
 
 onBeforeRouteLeave((to, from) => {
     if (!data.value.prevPath) {

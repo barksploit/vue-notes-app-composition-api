@@ -27,15 +27,6 @@ export const useNotesStore = defineStore('notes', () => {
     }
   ])
 
-  watch(
-    notes,
-    (state) => {
-      // persist the whole state to the local storage whenever it changes
-      localStorage.setItem('store', JSON.stringify(state))
-    },
-    { deep: true }
-  )
-
   /* Getters */
 
   const getNote = computed((state) => (id) => {
