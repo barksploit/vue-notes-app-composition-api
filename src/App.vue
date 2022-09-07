@@ -12,17 +12,16 @@
   <Footer />
 </template>
 
-<script>
+<script setup>
 import Footer from "@/components/Footer.vue";
+import { ref } from 'vue'
 
-export default {
-  data() {
-    return {
+  const data = ref({
       prevPath: "",
       paths: ["/", "/about", "/create"],
       transitionName: null,
-    };
-  },
+  })
+  
   components: {
     Footer,
   },
