@@ -37,8 +37,8 @@
   const store = useNotesStore()
 
   function deleteNote() {
-    if (confirm("Are you sure you want to delete " + note.title)) {
-      store.deleteNote(note);
+    if (confirm("Are you sure you want to delete " + props.note.title)) {
+      store.deleteNote(props.note);
     }
   }
 

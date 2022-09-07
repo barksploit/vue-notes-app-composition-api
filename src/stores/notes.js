@@ -45,7 +45,7 @@ export const useNotesStore = defineStore('notes', () => {
   /* Actions/Mutations */
 
   const deleteNote = (noteToDelete) => {
-    notes.value.splice(state.notes.findIndex((note) => note.id == noteToDelete.id), 1)
+    notes.value.splice(notes.value.findIndex((note) => note.id == noteToDelete.id), 1)
   }
 
   const createNote = (note) => {
