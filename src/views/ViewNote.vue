@@ -14,23 +14,24 @@
   </div>
 </template>
 
-<script>
-import router from "../router";
+<script setup>
+import { useRouter } from 'vue-router'
+import { useNotesStore } from '@/stores/notes'
+import { computed } from 'vue'
 
-export default {
-  props: {
-    id: String,
-  },
-  methods: {
-    goBack() {
-      router.go(-1);
-    },
-  },
-  computed: {
-    ...mapGetters(["getNote"]),
-    fetchNote() {
-      return this.getNote(this.id);
-    },
-  },
-};
+const router = useRouter()
+
+const store = useNotesStore()
+
+const props = defineProps({
+  id: String
+})
+
+function goBack() {
+  router.go(-1);
+}
+
+const fetchNote = computed(() => {
+  return store.getNote(props.id)
+})
 </script>
