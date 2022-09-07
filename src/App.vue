@@ -14,21 +14,24 @@
 
 <script setup>
 import Footer from "@/components/Footer.vue";
-import { ref } from 'vue'
+import { ref, beforeCreate, watch } from 'vue'
+import { useNotesStore } from '@/stores/notes'
+import { useRoute } from 'vue-router'
+
+const store = useNotesStore()
+const route = useRouter()
 
   const data = ref({
       prevPath: "",
       paths: ["/", "/about", "/create"],
       transitionName: null,
   })
-  
-  components: {
-    Footer,
-  },
-  beforeCreate() {
-    this.$store.commit("initialiseStore");
-  },
-  watch: {
+
+  beforeCreate(() => {
+    useNotesStore.initialiseStore()
+  })
+
+  watch(()
     $route(to, from) {
       if (!this.prevPath) {
         this.transitionName = "";
