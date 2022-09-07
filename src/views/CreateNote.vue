@@ -6,7 +6,7 @@
       <div class="input-group">
         <label for="title">Note Title</label>
         <input
-          v-model="titleInput"
+          v-model="state.titleInput"
           type="text"
           placeholder="Shopping List"
           required
@@ -16,7 +16,7 @@
       <div class="input-group">
         <label for="content">Note Content</label>
         <textarea
-          v-model="contentInput"
+          v-model="state.contentInput"
           placeholder="Eggs, Chicken, Bacon"
           required
         ></textarea>
@@ -29,29 +29,33 @@
   </div>
 </template>
 
-<script>
-import router from "../router";
-export default {
-  data() {
-    return {
+<script setup>
+import { useRouter } from 'vue-router'
+import { useNotesStore } from '@/stores/notes'
+import { ref } from 'vue'
+
+const store = useNotesStore()
+
+const router = useRouter()
+
+const state = ref({
       titleInput: "",
       contentInput: "",
-    };
-  },
-  methods: {
-    submitForm: function () {
-      const note = {
-        id: Math.floor(Math.random() * 100000),
-        title: this.titleInput,
-        dateCreated: Date.now(),
-        content: this.contentInput,
-      };
+})
 
-      this.$store.commit("createNote", note);
-      router.push({ name: "Home" });
-    },
-  },
-};
+function submitForm() {
+  const note = {
+    id: Math.floor(Math.random() * 100000),
+    title: state.value.titleInput,
+    dateCreated: Date.now(),
+    content: state.value.contentInput,
+  }
+
+    store.createNote(note)
+    router.push({ name: "Home" })
+
+}
+    
 </script>
 
 <style lang="scss" scoped>
