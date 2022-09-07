@@ -34,6 +34,8 @@ import Note from "@/components/Note.vue";
 import { ref, onMounted, computed } from 'vue'
 import { useNotesStore } from '@/stores/notes'
 
+  const store = useNotesStore() 
+
   const data = ref({
       notes: [],
       sortOrder: "nto",
@@ -42,43 +44,41 @@ import { useNotesStore } from '@/stores/notes'
   })
 
   onMounted(() => {
-    this.notes = this.getNotes
+    data.value.notes = store.getNotes
   })
 
-  const store = useNotesStore()
-
   const sortedNotes = computed(() => {
-      if (data.sortOrder === "nto") {
-        return notes
+      if (data.value.sortOrder === "nto") {
+        return data.value.notes
           .slice()
           .sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated))
           .filter(
             (note) =>
-              note.content.toLowerCase().includes(debouncedInput) ||
-              note.title.toLowerCase().includes(debouncedInput)
+              note.content.toLowerCase().includes(data.value.debouncedInput) ||
+              note.title.toLowerCase().includes(data.value.debouncedInput)
           )
       }
       else {
-        return notes
+        return data.value.notes
           .slice()
           .sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
           .filter(
             (note) =>
-              note.content.toLowerCase().includes(debouncedInput) ||
-              note.title.toLowerCase().includes(debouncedInput)
+              note.content.toLowerCase().includes(data.value.debouncedInput) ||
+              note.title.toLowerCase().includes(data.value.debouncedInput)
           );
       }
     })
 
     const searchInput = computed({
       get() {
-        return debouncedInput;
+        return data.value.debouncedInput;
       },
 
       set(val) {
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          debouncedInput = val.toLowerCase();
+        if (data.value.timeout) clearTimeout(data.value.timeout);
+        data.value.timeout = setTimeout(() => {
+          data.value.debouncedInput = val.toLowerCase();
         }, 300);
       }
     })
