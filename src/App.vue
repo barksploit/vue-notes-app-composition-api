@@ -1,85 +1,201 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div id="nav">
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link> |
+    <router-link :to="{ name: 'create' }">Create Note</router-link>
+  </div>
+  <router-view v-slot="{ Component, route }">
+    <Transition :name="transitionName" mode="out-in">
+      <component :is="Component" :key="route.path" />
+    </Transition>
+  </router-view>
+  <Footer />
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+<script>
+import Footer from "@/components/Footer.vue";
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+export default {
+  data() {
+    return {
+      prevPath: "",
+      paths: ["/", "/about", "/create"],
+      transitionName: null,
+    };
+  },
+  components: {
+    Footer,
+  },
+  beforeCreate() {
+    this.$store.commit("initialiseStore");
+  },
+  watch: {
+    $route(to, from) {
+      if (!this.prevPath) {
+        this.transitionName = "";
+      } else {
+        if (
+          this.paths.findIndex((path) => path == from.path) <
+          this.paths.findIndex((path) => path == to.path)
+        ) {
+          this.transitionName = "left";
+        } else {
+          this.transitionName = "right";
+        }
+      }
+      this.prevPath = to.path;
+    },
+  },
+};
+</script>
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
+<style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300&display=swap");
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+body {
+  background-color: rgb(244, 244, 244);
+  margin: 0;
+  overflow-x: hidden;
+  padding-bottom: 200px;
+  position: relative;
 }
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
+.back-button {
+  outline: none;
+  padding: 10px 15px;
+  margin: 50px auto;
   border: 0;
+  font-size: 1em;
+  font-family: Roboto;
+  display: block;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgb(36, 164, 88);
+  color: #fff;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.back-button:hover {
+  background-color: rgb(31, 183, 92);
+}
+.note {
+  background-color: rgb(255, 255, 255);
+  padding: 35px 35px 120px 35px;
+  position: relative;
+}
+.main-title {
+  color: rgb(255, 255, 255);
+  background-color: rgb(36, 164, 88);
+  margin: 0;
+  padding: 50px 0;
+  font-weight: lighter;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.note-content {
+  white-space: pre-wrap;
+  padding: 25px;
+  font-size: 1em;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.note-title {
+  font-size: 1.7em;
+  font-family: Roboto;
+  color: rgb(56, 56, 56);
+}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+.note-content {
+  color: #5e5e5ed9;
+}
 
-    padding: 1rem 0;
-    margin-top: 1rem;
+.note-title,
+.note-content {
+  font-weight: lighter;
+}
+
+.note-list {
+  max-width: 100%;
+  width: 1500px;
+  box-sizing: border-box;
+  padding: 0 25px;
+  margin: 50px auto;
+}
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  font-family: "Open Sans", sans-serif;
+  color: #2c3e50;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Roboto;
+}
+
+.date-created {
+  font-size: 1em;
+  font-family: Roboto;
+  opacity: 0.5;
+}
+
+#nav {
+  padding: 30px;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+  box-shadow: 3px 2px 4px 0px rgba(0, 0, 0, 0.057);
+
+  a {
+    color: #2c3e50;
+    text-decoration: none;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
   }
+}
+
+/*
+
+Vue Component Transitions
+
+*/
+
+.right-enter-active,
+.right-leave-active,
+.left-enter-active,
+.left-leave-active {
+  transition: all 0.2s linear;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.1s linear 0.2s;
+}
+
+.right-enter-from {
+  transform: translateX(-100vw);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.right-leave-to {
+  transform: translateX(100vw);
+}
+
+.left-enter-from {
+  transform: translateX(100vw);
+}
+
+.left-leave-to {
+  transform: translateX(-100vw);
 }
 </style>
