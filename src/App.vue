@@ -16,9 +16,11 @@
 import Footer from "@/components/Footer.vue";
 import { ref, onBeforeMount, watch } from 'vue'
 import { useNotesStore } from '@/stores/notes'
-import { onBeforeRouteLeave } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const store = useNotesStore()
+
+const route = useRoute()
 
 const data = ref({
     prevPath: "",
@@ -28,26 +30,27 @@ const data = ref({
 
 onBeforeMount(() => {
   store.initialiseStore()
+  console.log(route)
 })
 
 store.$subscribe((mutation, state) => {
   localStorage.setItem('store', JSON.stringify(state))
 })
 
-onBeforeRouteLeave((to, from) => {
+watch( route, () => {
     if (!data.value.prevPath) {
       data.value.transitionName = "";
     } else {
       if (
-        data.value.paths.findIndex((path) => path == from.path) <
-        data.value.paths.findIndex((path) => path == to.path)
+        data.value.paths.findIndex((path) => path == data.value.prevPath) <
+        data.value.paths.findIndex((path) => path == route.path)
       ) {
         data.value.transitionName = "left";
       } else {
         data.value.transitionName = "right";
       }
     }
-    data.value.prevPath = route.to.path;
+    data.value.prevPath = route.path;
   })
 </script>
 
