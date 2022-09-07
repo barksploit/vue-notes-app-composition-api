@@ -58,5 +58,5 @@ export const useCounterStore = defineStore('counter', () => {
     }
   }
 
-  return { notes, deleteNote, createNote, editNote, initialiseStore }
+  return { notes, deleteNote, createNote, editNote, initialiseStore, getNotes, getNote }
 })
