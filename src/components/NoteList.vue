@@ -31,7 +31,8 @@
 
 <script setup>
 import Note from "@/components/Note.vue";
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useNotesStore } from '@/stores/notes'
 
   const data = ref({
       notes: [],
@@ -43,7 +44,7 @@ import { ref, onMounted } from 'vue'
   onMounted(() => {
     this.notes = this.getNotes
   })
-  
+
   computed: {
     ...mapGetters(["getNotes"]),
     sortedNotes: function () {
