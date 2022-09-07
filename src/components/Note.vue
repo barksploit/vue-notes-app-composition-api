@@ -28,7 +28,7 @@
 <script setup>
 
   import { defineProps } from 'vue'
-  import {  }
+  import { useNotesStore } from '@/stores/notes'
 
   const props = defineProps({
     note: Object
