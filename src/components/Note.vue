@@ -25,20 +25,21 @@
   </article>
 </template>
 
-<script>
-export default {
-  name: "Note",
-  props: {
-    note: Object,
-  },
-  methods: {
-    deleteNote() {
-      if (confirm("Are you sure you want to delete " + this.note.title)) {
-        this.$store.commit("deleteNote", this.note);
-      }
-    },
-  },
-};
+<script setup>
+
+  import { defineProps } from 'vue'
+  import {  }
+
+  const props = defineProps({
+    note: Object
+  })
+
+  deleteNote() {
+    if (confirm("Are you sure you want to delete " + this.note.title)) {
+      this.$store.commit("deleteNote", this.note);
+    }
+  }
+
 </script>
 
 <style lang="scss" scoped>
