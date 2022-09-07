@@ -34,9 +34,11 @@
     note: Object
   })
 
-  deleteNote() {
-    if (confirm("Are you sure you want to delete " + this.note.title)) {
-      this.$store.commit("deleteNote", this.note);
+  const store = useNotesStore()
+
+  function deleteNote() {
+    if (confirm("Are you sure you want to delete " + note.title)) {
+      store.deleteNote(note);
     }
   }
 
