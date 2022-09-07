@@ -29,23 +29,21 @@
   </section>
 </template>
 
-<script>
-import Note from "./Note.vue";
-import {mapGetters} from 'vuex'
+<script setup>
+import Note from "@/components/Note.vue";
+import { ref, onMounted } from 'vue'
 
-export default {
-  name: "NoteList",
-  data() {
-    return {
+  const data = ref({
       notes: [],
       sortOrder: "nto",
       timeout: null,
       debouncedInput: "",
-    };
-  },
-  mounted() {
+  })
+
+  onMounted(() => {
     this.notes = this.getNotes
-  },
+  })
+  
   computed: {
     ...mapGetters(["getNotes"]),
     sortedNotes: function () {
